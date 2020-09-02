@@ -35,7 +35,7 @@ class SeoDecoder extends SeoDecoder_parent
             $matches
         );
 
-        if ($matched === false || !isset($this->controllerMap[$matches['cl']])) {
+        if ($matched !== 1 || !isset($this->controllerMap[$matches['cl']])) {
             return parent::decodeUrl($seoUrl);
         }
 
