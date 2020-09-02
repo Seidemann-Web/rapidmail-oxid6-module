@@ -2,9 +2,10 @@
 
 namespace Rapidmail\Oxid6Module\Helper;
 
-use OxidEsales\Eshop\Core\Database\Adapter\Doctrine\Database;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\EshopCommunity\Internal\Common\Database\QueryBuilderFactory;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidEsales\EshopCommunity\Internal\Framework\Database\QueryBuilderFactoryInterface;
 
 /**
  * DatabaseHelper
@@ -22,22 +23,14 @@ class DatabaseHelper
     }
 
     /**
-     * @return \OxidEsales\EshopCommunity\Internal\Common\Database\QueryBuilderFactoryInterface
+     * @return \OxidEsales\EshopCommunity\Internal\Framework\Database\QueryBuilderFactoryInterface
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
      * @throws \ReflectionException
      */
     public static function getQueryBuilderFactory()
     {
-
-        $database = static::getDatabaseAdapter();
-        $r = new \ReflectionMethod(Database::class, 'getConnection');
-        $r->setAccessible(true);
-
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = $r->invoke($database);
-
-        return new QueryBuilderFactory($connection);
-
+        $container = ContainerFactory::getInstance()->getContainer();
+        return $container->get(QueryBuilderFactoryInterface::class);
     }
 
 }
